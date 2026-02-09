@@ -20,6 +20,7 @@ def register_user(username, password):
 
 def get_user_by_username(username):
     conn = sqlite3.connect('pyportal.db')
+    conn.row_factory = sqlite3.Row # Utilise le nom de la colonne pour faire les recherche
     cursor = conn.cursor()
 
     try:
