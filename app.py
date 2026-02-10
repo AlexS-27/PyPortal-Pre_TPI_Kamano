@@ -1,3 +1,13 @@
+"""
+File : app.py
+Description : Flask main controller handling routes, authentication
+                and session logic for the PyPortal project.
+Autor : Alex Kamano
+Version : 1.0
+Project : PyPortal
+Date : 10 Février 2026
+"""
+
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from werkzeug.security import check_password_hash
@@ -19,6 +29,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+# route to the main page
 @app.route('/')
 @login_required
 def home():
@@ -26,6 +37,12 @@ def home():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+        Function to register user
+        :param username:
+        :param password:
+        :return:
+        """
     if request.method == 'POST':
         username = request.form['username'].strip()
         password = request.form['password'].strip()
@@ -48,6 +65,12 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+        Function to login user
+        :param username:
+        :param password:
+        :return:
+        """
     if request.method == 'POST':
         username = request.form['username'].strip()
         password = request.form['password'].strip()
@@ -62,6 +85,15 @@ def login():
             flash('Invalid username or password', 'danger')
             return render_template('login.html')
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    """
+        Function to logout user
+    """
+    session.clear()
+    flash('You have successfully logged out', 'info')
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)
