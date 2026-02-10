@@ -48,6 +48,7 @@ def register():
         password = request.form['password'].strip()
 
         user = get_user_by_username(username)
+        # Check the password
         is_strong, message = is_password_strong(password)
 
         if not is_strong:
