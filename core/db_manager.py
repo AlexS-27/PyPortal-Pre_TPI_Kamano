@@ -53,3 +53,39 @@ def get_user_by_username(username):
         return user
     finally:
         conn.close()
+
+def save_score(score_value, user_id):
+
+    conn = sqlite3.connect('pyportal.db')
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute(
+        "INSERT INTO scores (value, user_id) VALUES (?, ?)",
+    (score_value, user_id)
+        )
+        conn.commit()
+        return True
+    except Exception as e:
+        print(f"Error during saving score: {e}")
+        return False
+    finally:
+        conn.close()
+
+def get_last_score(user_id):
+    """
+    Function to get last score
+    """
+    conn = sqlite3.connect('pyportal.db')
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "select * from scores where user_id = ? order by archived_at desc limit 1",
+        (user_id,)
+        )
+        result = cursor.fetchone()
+        return result[0] if result else 0
+    finally:
+        conn.close()
+
+
