@@ -11,9 +11,12 @@ Date : 10 Février 2026
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from werkzeug.security import check_password_hash
-from core.db_manager import get_user_by_username, register_user
+from core.db_manager import get_user_by_username, register_user, save_score, get_last_score
 from functools import wraps
 from core.utils import is_password_strong
+from game import main
+from game.main import run_game
+
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 app.config['PERMANENT_SESSION_LIFETIME'] = 1800 #the session expire after 30 minutes
@@ -75,7 +78,6 @@ def login():
     if request.method == 'POST':
         username = request.form['username'].strip()
         password = request.form['password'].strip()
-
         user = get_user_by_username(username)
 
         if user and check_password_hash(user['password'], password):
@@ -95,6 +97,18 @@ def logout():
     session.clear()
     flash('You have successfully logged out', 'info')
     return redirect(url_for('login'))
+
+@app.route('/launch_game')
+@login_required
+def launch_game():
+    final_score = run_game()
+
+    if save_score(final_score, session['user_id']):
+        flash(f"Game Over! Your score: {final_score}", "info")
+    else:
+        flash("Error during the saving of the score.", "danger")
+
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     app.run(debug=True)
