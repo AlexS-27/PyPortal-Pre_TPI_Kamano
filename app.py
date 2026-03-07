@@ -14,7 +14,6 @@ from werkzeug.security import check_password_hash
 from core.db_manager import get_user_by_username, register_user, save_score, get_last_score
 from functools import wraps
 from core.utils import is_password_strong
-from game import main
 from game.main import run_game
 
 app = Flask(__name__)
@@ -47,8 +46,8 @@ def register():
         :return:
         """
     if request.method == 'POST':
-        username = request.form['username'].strip()
-        password = request.form['password'].strip()
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '').strip()
 
         user = get_user_by_username(username)
         # Check the password
@@ -76,8 +75,8 @@ def login():
         :return:
         """
     if request.method == 'POST':
-        username = request.form['username'].strip()
-        password = request.form['password'].strip()
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '').strip()
         user = get_user_by_username(username)
 
         if user and check_password_hash(user['password'], password):
