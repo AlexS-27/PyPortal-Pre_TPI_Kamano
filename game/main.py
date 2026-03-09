@@ -1,61 +1,42 @@
 import sys
-import random
 import pygame
-
-# initialisation
-pygame.init()
-WIDTH, HEIGHT = 800, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('PyPortal - Aim Trainer')
-clock = pygame.time.Clock()
-
-#Colors
-WHITE = (240, 240, 255)
-DARK = (5,5,17)
-GREEN = (34,197,94)
-ORANGE = (249,115,22)
-RED = (239,68,68)
-
-class Target:
-    def __init__(self):
-        # define the difficulty (size vs points)
-        rand = random.random()
-        if rand > 0.6: # 60% grand
-            self.radius, self.point, self.color = 30, 10, GREEN
-        elif rand > 0.2: # 40% medium
-            self.radius, self.point, self.color = 20, 25, ORANGE
-        else: # 20% small
-            self.radius, self.point, self.color = 10, 50, RED
-
-        self.x = random.randint(self.radius, WIDTH - self.radius)
-        self.y = random.randint(self.radius, HEIGHT - self.radius)
-        self.spawn_time = pygame.time.get_ticks()
-
-    def draw(self):
-        pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
+from settings import *
+from targets import Target
+from effects import Particle
 
 def run_game():
-    game_duration = 30 #Time in secondes
-    start_ticks = pygame.time.get_ticks() #Time when lauching the game
+    # initialisation
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption('PyPortal - Aim Trainer')
+    clock = pygame.time.Clock()
+    font = pygame.font.SysFont('Arial', 28, bold=True)
 
     score = 0
     targets = []
-    run = True
+    particles = []
+    start_ticks = pygame.time.get_ticks() #Time when lauching the game
+
+    pygame.mouse.set_visible(False)
 
     #Timer to make appear the targets
     SPAWN_EVENT = pygame.USEREVENT + 1
-    pygame.time.set_timer(SPAWN_EVENT, 800)
+    pygame.time.set_timer(SPAWN_EVENT, SPAWN_RATE)
 
+    run = True
     while run:
+        screen.fill(WHITE)
+
+        # Board behind the game (bg)
+        for i in range(0, WIDTH, 40):
+            pygame.draw.line(screen, (230,230,240), (i,0), (i,HEIGHT))
+        for j in range(0, HEIGHT, 40):
+            pygame.draw.line(screen, (230,230,240), (0, j), (WIDTH, j))
 
         #calculate the past time
-        seconds_passed = (pygame.time.get_ticks() - start_ticks) / 1000
-        time_left = max(0, game_duration - seconds_passed)
-
+        time_left = max(0, GAME_DURATION - (pygame.time.get_ticks() - start_ticks) / 1000)
         if time_left <= 0:
             run = False
-
-        screen.fill(WHITE)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -74,25 +55,38 @@ def run_game():
                     distance = ((t.x - mouse_pos[0]) ** 2 + (t.y - mouse_pos[1]) ** 2) ** 0.5
                     if distance <= t.radius:
                         score += t.point
-                        targets.remove(t)
+                        for _ in range(12):
+                            particles.append(Particle(t.x, t.y, t.color))
+                        if t in targets:
+                            targets.remove(t)
+                        break
+
+        # Update and Draw
+        for p in particles[:]:
+            p.update()
+            p.draw(screen)
+            if p.lifetime <= 0:
+                particles.remove(p)
 
         #draw the targets et manage their life durancy
         current_time = pygame.time.get_ticks()
         for t in targets[:]:
-            if current_time - t.spawn_time > 1500: #dissapear after 1.5sec
-                targets.remove(t)
+            if current_time - t.spawn_time > TARGET_LIFESPAN: #dissapear after 1.5sec
+                if t in targets:
+                    targets.remove(t)
             else:
-                t.draw()
+                t.draw(screen)
 
-        font = pygame.font.SysFont('Inter', 30)
-        timer_text = font.render(f'Temps: {int(time_left)}s' , True, RED)
-        score_text = font.render(f"Score: {score}", True, DARK)
+        # UI and Crosshair
+        screen.blit(font.render(f"SCORE: {score}", True, DARK), (20,20)) # left
+        screen.blit(font.render(f"{int(time_left)}s", True, RED), (WIDTH - 80, 20)) # Up right
 
-        screen.blit(timer_text, (WIDTH - 150, 20)) # Up right
-        screen.blit(score_text, (20, 20)) # Up left
+        mx, my = pygame.mouse.get_pos()
+        pygame.draw.line(screen, DARK, (mx - 10, my), (mx + 10, my), 2)
+        pygame.draw.line(screen, DARK, (mx, my - 10), (mx, my + 10), 2)
 
         pygame.display.flip()
-        clock.tick(60)
+        clock.tick(FPS)
 
     screen.fill((5, 5, 17))
     over_text = font.render("TIME'S UP !", True, WHITE)
@@ -104,5 +98,4 @@ def run_game():
 
     pygame.quit()
     return score #return the score for flask
-
 run_game()
