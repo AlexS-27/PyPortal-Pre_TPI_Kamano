@@ -16,10 +16,13 @@ from functools import wraps
 from core.utils import is_password_strong, validate_username
 from game.main import run_game
 from multiprocessing import Process, Value
+from flasgger import Swagger
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 app.config['PERMANENT_SESSION_LIFETIME'] = 1800 #the session expire after 30 minutes
+
+swagger = Swagger(app)
 
 # With the AI help
 # Manage the fact that the user need to be connect to access to the page
@@ -48,11 +51,25 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """
-        Function to register user
-        :param username:
-        :param password:
-        :return:
-        """
+    User Registration
+    ---
+    tags:
+      - Authentication
+    parameters:
+      - name: username
+        in: formData
+        type: string
+        required: true
+      - name: password
+        in: formData
+        type: string
+        required: true
+    responses:
+      200:
+        description: Returns the registration page or redirects to login
+      400:
+        description: Invalid input or password too weak
+    """
     if request.method == 'POST':
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '').strip()
@@ -124,6 +141,15 @@ def game_wrapper(score_obj):
 @app.route('/launch_game')
 @login_required
 def launch_game():
+    """
+        Launch Pygame and Save Score
+        ---
+        tags:
+          - Game
+        responses:
+          302:
+            description: Redirects to home after saving the score
+        """
     # On utilise une valeur partagée pour récupérer le score du processus enfant
     shared_score = Value('i', 0)
 
