@@ -1,8 +1,8 @@
 import sys
 import pygame
-from settings import *
-from targets import Target
-from effects import Particle
+from .base_settings import *
+from .targets import Target
+from .effects import Particle
 
 def run_game():
     # initialisation
@@ -98,4 +98,4 @@ def run_game():
 
     pygame.quit()
     return score #return the score for flask
-run_game()
+
