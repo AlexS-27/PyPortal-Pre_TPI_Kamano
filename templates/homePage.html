@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <div class="container py-5" style="max-width: 800px;">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="fw-bold text-dark" style="font-size: 2.5rem;">Game Dashboard</h1>
+            <a href="{{ url_for('logout') }}" class="btn btn-light shadow-sm border px-3 py-2 d-flex align-items-center gap-2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Logout
+            </a>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4 custom-radius">
+            <div class="card-body p-4">
+                <h2 class="fw-bold mb-1" style="font-size: 2.8rem;">Welcome, {{ username }}!</h2>
+                <p class="text-muted fs-4 mb-0">Ready to beat your high score?</p>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4 custom-radius border-hover">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="icon-box bg-success text-white">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </div>
+                    <h3 class="fw-bold mb-0">Lancer le Jeu</h3>
+                </div>
+                <p class="text-muted mb-4 fs-5">Click to start a new game session</p>
+                <a href="{{ url_for('launch_game') }}" class="btn btn-dark w-100 py-3 fw-bold fs-5 d-flex align-items-center justify-content-center gap-2 custom-radius">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    Start Playing
+                </a>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4 custom-radius">
+            <div class="card-body p-5 text-center position-relative">
+                <div class="icon-box bg-warning text-white position-absolute" style="top: 20px; left: 20px;">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                </div>
+                <h3 class="fw-bold mb-4" style="margin-left: 60px; text-align: left;">Your Last Score</h3>
+
+                <div class="py-4">
+                    <div class="display-1 fw-bold text-dark mb-0">{{ last_score }}</div>
+                    <p class="text-muted fs-4">points</p>
+                </div>
+
+                <a href="#" class="btn btn-outline-dark px-4 py-2 custom-radius d-inline-flex align-items-center gap-2">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                    View Leaderboard
+                </a>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm custom-radius">
+            <div class="card-body p-4">
+                <h4 class="fw-bold mb-3">How to Play:</h4>
+                <ul class="text-muted fs-5 mb-0 ps-3">
+                    <li class="mb-2">Click "Start Playing" to launch the game</li>
+                    <li class="mb-2">Use your mouse to shoot targets (Aim Trainer)</li>
+                    <li class="mb-2">Your score will be automatically saved when the game ends</li>
+                    <li>Check the leaderboard to see how you rank against other players</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Reproduit le dégradé de fond de la maquette */
+    .dashboard-wrapper {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #e0eaff 0%, #f5e3ff 50%, #ffe0f0 100%);
+    }
+
+    /* Arrondis larges comme sur le design */
+    .custom-radius {
+        border-radius: 20px !important;
+    }
+
+    /* Boîtes d'icônes carrées avec coins arrondis */
+    .icon-box {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+    }
+
+    /* Effet de survol sur la carte "Lancer le Jeu" */
+    .border-hover {
+        border: 2px solid transparent !important;
+        transition: all 0.3s ease;
+    }
+    .border-hover:hover {
+        border-color: rgba(0,0,0,0.1) !important;
+        transform: translateY(-2px);
+    }
+
+    /* Bouton noir spécial pour Start Playing */
+    .btn-dark {
+        background-color: #0a0a0c;
+        border: none;
+    }
+</style>
+{% endblock %}
