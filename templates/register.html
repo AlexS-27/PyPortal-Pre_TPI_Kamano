@@ -6,5 +6,37 @@
 </head>
 <body>
 
+<div class="auth-card text-center">
+    <div class="icon-circle">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h.01M9 12h.01M15 12h.01M18 12h.01M4 15a8 8 0 1 0 16 0V9a8 8 0 1 0-16 0v6Z"/><path d="M12 12v.01M12 15v.01"/></svg>
+    </div>
+
+    <h2 class="fw-bold mb-1">Create Account</h2>
+    <p class="sub-text mb-4">Sign up to start playing</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} py-2 small">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('register') }}" method="POST" class="text-start">
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" placeholder="Enter your username" required>
+        </div>
+        <div class="mb-4">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn btn-dark w-100">Sign Up</button>
+    </form>
+
+    <p class="mt-4 mb-0 small">
+        Already have an account? <a href="{{ url_for('login') }}" class="text-decoration-none fw-bold text-dark">Login</a>
+    </p>
+</div>
 </body>
 </html>
