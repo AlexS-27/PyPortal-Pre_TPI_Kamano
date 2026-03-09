@@ -13,7 +13,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.security import check_password_hash
 from core.db_manager import get_user_by_username, register_user, save_score, get_last_score
 from functools import wraps
-from core.utils import is_password_strong
+from core.utils import is_password_strong, validate_username
 from game.main import run_game
 
 app = Flask(__name__)
@@ -50,12 +50,13 @@ def register():
         password = request.form.get('password', '').strip()
 
         user = get_user_by_username(username)
+
         if user is True:
             flash('Username already exists!', 'danger')
             return render_template('register.html')
 
-        is_safe, message = is_username_safe(username)
-        if not is_safe:
+        is_correct, message = validate_username(username)
+        if not is_correct:
             flash(message, 'danger')
             return render_template('register.html')
 
