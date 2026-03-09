@@ -19,13 +19,13 @@ jobs:
         python-version: "3.12"
 
     - name: Install dependencies
-      run:
+      run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
     - name: Lint with flake8
-      run:
+      run: |
         # E9, F63, F7, F82 sont des erreurs critiques (syntaxe, etc.)
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # Le reste est traité comme des avertissements
@@ -34,7 +34,7 @@ jobs:
     - name: Run Database Init Test
       env:
         SDL_VIDEODRIVER: dummy
-      run:
+      run: |
         python init.db.py
         # Optionnel : vérifier si le fichier a bien été créé
         ls -l pyportal.db
