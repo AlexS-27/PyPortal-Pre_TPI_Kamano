@@ -50,11 +50,20 @@ def register():
         password = request.form.get('password', '').strip()
 
         user = get_user_by_username(username)
+        if user is True:
+            flash('Username already exists!', 'danger')
+            return render_template('register.html')
+
+        is_safe, message = is_username_safe(username)
+        if not is_safe:
+            flash(message, 'danger')
+            return render_template('register.html')
+
         # Check the password
-        is_strong, message = is_password_strong(password)
+        is_strong, pw_message = is_password_strong(password)
 
         if not is_strong:
-            flash(message, 'danger')
+            flash(pw_message, 'danger')
             return render_template('register.html')
 
         if register_user(username, password):
