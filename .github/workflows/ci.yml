@@ -42,4 +42,4 @@ jobs:
     - name: Run tests with pytest
       env:
         SDL_VIDEODRIVER: dummy # On le remet ici si pytest lance aussi du code Pygame
-      run: pytest tests/
+      run: python -m pytest tests/
