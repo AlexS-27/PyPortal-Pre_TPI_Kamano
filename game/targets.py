@@ -1,6 +1,6 @@
 import pygame
 import random
-from settings import *
+from .base_settings import *
 
 class Target:
     def __init__(self):
