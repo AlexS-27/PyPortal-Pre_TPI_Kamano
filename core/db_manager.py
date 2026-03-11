@@ -129,4 +129,20 @@ def get_last_score(user_id):
     finally:
         conn.close()
 
-
+def get_leaderboard():
+    conn = sqlite3.connect('pyportal.db')
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    try:
+        query = """
+            SELECT users.username, MAX(scores.value) as high_score
+            FROM users
+            JOIN scores ON users.id_user = scores.user_id
+            GROUP BY users.id_user
+            ORDER BY high_score DESC
+            LIMIT 10
+        """
+        cursor.execute(query)
+        return cursor.fetchall()
+    finally:
+        conn.close()
