@@ -11,7 +11,7 @@ Date : 10 Février 2026
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from werkzeug.security import check_password_hash
-from core.db_manager import get_user_by_username, register_user, save_score, get_last_score
+from core.db_manager import get_user_by_username, register_user, save_score, get_last_score, get_leaderboard
 from functools import wraps
 from core.utils import is_password_strong, validate_username
 from game.main import run_game
@@ -166,6 +166,12 @@ def launch_game():
         flash("Erreur lors de la sauvegarde.", "danger")
 
     return redirect(url_for('home'))
+
+@app.route('/leaderboard')
+@login_required
+def leaderboard():
+    top_scores = get_leaderboard()
+    return render_template("leaderboard.html", leaderboard=top_scores)
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False)
