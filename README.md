@@ -145,7 +145,7 @@ B. **Cycle de jeu**
 
 * **Erreur ModuleNotFoundError :** Vérifiez que le .venv est activé
 * **Affichage Mac :** Si la fenêtre pygame ne s'affiche pas, vérifiez dans app.py que use_reloader=False est bien présent
-* **Swagger :** La documentation est diponible sur `http://127.0.0.1:5000/api-docs/
+* **Swagger :** La documentation est diponible sur `http://127.0.0.1:5000/apidocs/
 
 ---
 ### Convention
