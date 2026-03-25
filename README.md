@@ -68,50 +68,86 @@ Connexion entre jeu et backend :
 ---
 ### Prérequis
 * Base de donnée : SQLite 
-* Technologie : Python 3.12 (Flask 3.1.2, Pygame 2.6.1)
-* OS supportée : Windows 11 Education 24H2
+* Technologie : Python 3.12
+* Bibliothèquea : Flask 3.1.2, Pygame 2.6.1, Flasgger (Swagger)
+* OS supportée : Windows 11/MacOs
 * Outil de versioning : Git 2.51.2
 * IDE : PyCharm 2025.2.4 Professionnel
 * Navigateur de test : Microsoft Edge
 * Gestionnaire de paquets : pip 25.3
 
-### Configuration
-Exécuter le fichier de la création de la db dans votre cmd (init.db.py). 
-
-## Déploiement
-
+---
+## Installation (Manuel Technique)
+1. **Clonage/Extraction :** Placez le dossier `PyPortal-Pre_TPI_Kamano` sur votre espace de travail.
+2. **Environnement Virtuel :**
+   ```
+   python -m venv .venv
+   # Activer l'environement
+   source .venv/bin/activate #macOS
+   .venv\script\activate     #Windows
+3. **Installation des dépendances :** `pip install -r requirements.txt`
+4. **Initialisation :** Création de la base de données => `python init_db.py`
+5. **Lancement :** `python app.py`  
 ---
 
 ## Structure du répertoire
 
 ---
 
-````PyPortal/
-├── api/                         
-│   └── routes.py             
-├── core/                         
+````PyPortal-Pre_TPI_Kamano/
+├── .github/
+│   └── workflows/
+│       └── ci.yml          
+├── core/
+│   ├── blacklist.txt                        
 │   ├──  auth.py               
 │   └── db_manager.py   
-├── docs                      
-└── game/            
-    ├── main.py          
-    └── assets/               
+├── docs/                    
+├── game/
+│   ├── base_settings.py
+│   ├── effects.py          
+│   ├── main.py          
+│   └── targets.py
+├── htmlcov/
+├── templates/
+│   ├── base.html
+│   ├── homePage.html
+│   ├── leaderboard.html
+│   ├── login.html
+│   └── register.html
+├── tests/
+│   └── test_utils.py 
 ├── .venv/                         
 ├── web/                       
 │   ├── static/           
 │   │   └── style.css
-│   └── templates/      
+│   └── templates/
+├── .gitignore    
 ├── app.py                    
 ├── init_db.py                
-├── pyportal.db               
+├── pyportal.db
+├── README.md          
 ├── requirements.txt       
 ├── schema.sql               
 ````
+---
+## Guide d'utilisation
 
-## Collaboration
+A. **Navigation :** Accédez à `http://127.0.0.1:5000` via Microsoft Edge ou Opéra.
+B. **Cycle de jeu**
+ 1. **Compte :** Créez un compte depuis register puis connectez-vous.
+ 2. **Partie :** Cliquez sur "Start Playing". Une fenêtre pygame s'ouvre.
+ 3. **Objectifs :** Cliquez sur les cibles, un timer de 30 secondes gère la fin de partie.
+ 4. **Score :** A la fermeture du jeu, retournez sur la page web et votre dernier score sera mis à jour (seul les deux meilleurs score ou plus récent sont enregistré)
 
 ---
+## Dépannage 
 
+* **Erreur ModuleNotFoundError :** Vérifiez que le .venv est activé
+* **Affichage Mac :** Si la fenêtre pygame ne s'affiche pas, vérifiez dans app.py que use_reloader=False est bien présent
+* **Swagger :** La documentation est diponible sur `http://127.0.0.1:5000/api-docs/
+
+---
 ### Convention
 Commit Ce projet utilise les Conventional Commits. Les mots principaux étant: "feat, fix, chore, refactor, test, docs" en anglais pour ce projet.
 
