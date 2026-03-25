@@ -94,7 +94,7 @@ def run_game():
     screen.blit(over_text, (WIDTH // 2 - 50, HEIGHT // 2 - 50))
     screen.blit(over_score, (WIDTH // 2 - 50, HEIGHT // 2 ))
     pygame.display.flip()
-    pygame.time.wait(2000)  # Attend 2 secondes pour que le joueur voie son score final
+    pygame.time.wait(2000)  # Wait 2 seconds for the user in order that he can read the end page
 
     pygame.quit()
     return score #return the score for flask
