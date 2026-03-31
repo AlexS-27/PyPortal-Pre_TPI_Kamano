@@ -35,8 +35,13 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# route to the main page
+# route default page
 @app.route('/')
+def default():
+    return redirect(url_for('login'))
+
+# route to the main page
+@app.route('/home')
 @login_required
 def home():
     # Récupérer le score via ton db_manager
