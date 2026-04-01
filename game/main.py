@@ -1,3 +1,12 @@
+"""
+File : game/main.py
+Description : Main loop for the PyPortal game
+Autor : Alex Kamano
+Version : 1.0
+Project : PyPortal
+Date : 3 arch 2026
+"""
+
 import sys
 import pygame
 from .base_settings import *

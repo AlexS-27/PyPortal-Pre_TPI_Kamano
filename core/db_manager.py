@@ -1,16 +1,15 @@
 """
 File : core/db_manager.py
 Description : SQLite database manager. Contains SQL queries
-                for registration, login, and profile retrieval.
+                for registration, login, saving of the passwords and profile retrieval.
 Autor : Alex Kamano
 Version : 1.0
 Project : PyPortal
-Date : 10 Février 2026
+Date : 9 March 2026
 """
 
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
-
 
 def register_user(username, password):
     """
@@ -18,6 +17,8 @@ def register_user(username, password):
     :param username:
     :param password:
     :return:
+    used for :
+    - the registration function
     """
     conn = sqlite3.connect('pyportal.db')
     cursor = conn.cursor()
@@ -56,6 +57,13 @@ def get_user_by_username(username):
 
 
 def save_score(score_value, user_id):
+    """
+     Function to save the score
+     :param user_id, score_value:
+     :return a boolean value indicating if the score is valid
+     used for :
+        - the game functions
+     """
     conn = sqlite3.connect('pyportal.db')
     # Use row to access to the row easily
     conn.row_factory = sqlite3.Row
@@ -113,6 +121,10 @@ def save_score(score_value, user_id):
 def get_last_score(user_id):
     """
     Function to get last score
+    :param user_id:
+    :return score:
+    used for :
+    - the home page functions
     """
     conn = sqlite3.connect('pyportal.db')
     cursor = conn.cursor()
@@ -130,6 +142,12 @@ def get_last_score(user_id):
         conn.close()
 
 def get_leaderboard():
+    """
+      Function to get the top 10 score
+      return : top 10 score
+      used for :
+      - the leaderboard functions
+      """
     conn = sqlite3.connect('pyportal.db')
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()

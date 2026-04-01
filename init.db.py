@@ -1,6 +1,13 @@
-import sqlite3
-import os
+"""
+File : init.db.py
+Description : This file contains the creation of the database
+Autor : Alex Kamano
+Version : 1.0
+Project : PyPortal
+Date : 3 February 2026
+"""
 
+import sqlite3
 
 def initialize_database():
     db_name = 'pyportal.db'
