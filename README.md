@@ -84,7 +84,7 @@ Connexion entre jeu et backend :
    python -m venv .venv
    # Activer l'environement
    source .venv/bin/activate #macOS
-   .venv\script\activate     #Windows
+   .venv\Scripts\Activate     #Windows
 3. **Installation des dépendances :** `pip install -r requirements.txt`
 4. **Initialisation :** Création de la base de données => `python init_db.py`
 5. **Lancement :** `python app.py`  
