@@ -57,12 +57,12 @@ def get_user_by_username(username):
 
 def save_score(score_value, user_id):
     conn = sqlite3.connect('pyportal.db')
-    # On utilise Row pour accéder facilement aux colonnes par nom
+    # Use row to access to the row easily
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
 
     try:
-        # 1. Récupérer les scores actuels de l'utilisateur (triés du plus haut au plus bas)
+        # Get all the score sort by the highest
         cursor.execute(
             "SELECT id_score, value, archived_at FROM scores WHERE user_id = ? ORDER BY value DESC, archived_at DESC",
             (user_id,)
@@ -70,28 +70,28 @@ def save_score(score_value, user_id):
         existing_scores = cursor.fetchall()
 
         if len(existing_scores) < 2:
-            # S'il y a moins de 2 scores, on enregistre simplement le nouveau
+            # If there's less than two score saved, insert the new value
             cursor.execute(
                 "INSERT INTO scores (value, user_id) VALUES (?, ?)",
                 (score_value, user_id)
             )
         else:
-            # Il y a déjà 2 scores. On applique tes règles :
-            score_1 = existing_scores[0]  # Le meilleur score
-            score_2 = existing_scores[1]  # Le moins bon des deux
+            # there's two score so :
+            score_1 = existing_scores[0]  # The best score
+            score_2 = existing_scores[1]  # The less high
 
-            # Règle A : Si le nouveau score est meilleur que l'un des deux existants
-            # On remplace le plus petit des deux (score_2)
+            # Rule number 1 : If the new one is highest of one saved
+            # Replace the smallest (score_2)
             if score_value > score_1['value']:
                 cursor.execute(
                     "UPDATE scores SET value = ?, archived_at = CURRENT_TIMESTAMP WHERE id_score = ?",
                     (score_value, score_2['id_score'])
                 )
 
-            # Règle B : Si le score actuel n'est pas meilleur, on remplace le plus ancien
-            # Note : Si les deux scores sont égaux au nouveau, on remplace quand même le plus ancien
+            # Rule number 2 : If the new one is the best one we replace by the oldest saved
+            # Note : if the scores identicals we replace the oldest one
             else:
-                # On cherche le plus ancien des deux via 'archived_at'
+                # Search the oldest 'archived_at'
                 cursor.execute(
                     "SELECT id_score FROM scores WHERE user_id = ? ORDER BY archived_at ASC LIMIT 1",
                     (user_id,)
