@@ -5,13 +5,13 @@ Description : Flask main controller handling routes, authentication
 Autor : Alex Kamano
 Version : 1.0
 Project : PyPortal
-Date : 10 Février 2026
+Date : 31 March 2026
 """
 
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from werkzeug.security import check_password_hash
-from core.db_manager import get_user_by_username, register_user, save_score, get_last_score
+from core.db_manager import get_user_by_username, register_user, save_score, get_last_score, get_leaderboard
 from functools import wraps
 from core.utils import is_password_strong, validate_username
 from game.main import run_game
@@ -27,6 +27,13 @@ swagger = Swagger(app)
 # With the AI help
 # Manage the fact that the user need to be connect to access to the page
 def login_required(f):
+    """
+     Function to get user by username
+     :param f:
+     :return decorated function:
+     used for :
+     - the verification of the correctly login method
+     """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
@@ -35,10 +42,27 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# route to the main page
+# route default page
 @app.route('/')
+def default():
+    """
+     route to redirect to the login page
+     :return redirect to login page:
+     used for :
+     - the access to the login page
+     """
+    return redirect(url_for('login'))
+
+# route to the main page
+@app.route('/home')
 @login_required
 def home():
+    """
+      route to render template of the home page
+      :return render template of the home page:
+      used for :
+      - drawing the home page view
+      """
     # Récupérer le score via ton db_manager
     current_user_id = session.get('user_id')
     last_score = get_last_score(current_user_id)
@@ -166,6 +190,12 @@ def launch_game():
         flash("Erreur lors de la sauvegarde.", "danger")
 
     return redirect(url_for('home'))
+
+@app.route('/leaderboard')
+@login_required
+def leaderboard():
+    top_scores = get_leaderboard()
+    return render_template("leaderboard.html", leaderboard=top_scores)
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False)

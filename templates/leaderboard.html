@@ -1,0 +1,81 @@
+<!--
+File : templates/leaderboard.html
+Description : This file contains the leaderboard view
+Autor : Alex Kamano with help of IA
+Version : 1.0
+Project : PyPortal
+Date : 16 March 2026
+-->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="leaderboard-bg">
+    <div class="container py-5" style="max-width: 800px;">
+        
+        <div class="d-flex align-items-center gap-3 mb-5">
+            <a href="{{ url_for('home') }}" class="btn btn-white shadow-sm custom-radius p-2 px-3">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            </a>
+            <div class="icon-square-purple">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            </div>
+            <h1 class="fw-bold m-0" style="font-size: 2.5rem; color: #1e293b;">Leaderboard</h1>
+        </div>
+
+        <div class="card border-0 shadow-sm custom-radius-lg overflow-hidden">
+            <div class="p-4"><h5 class="fw-bold m-0">Top Players</h5></div>
+            
+            <table class="table mb-0">
+                <thead class="text-muted small text-uppercase">
+                    <tr>
+                        <th class="ps-4 border-0">Rank</th>
+                        <th class="border-0">Player Name</th>
+                        <th class="text-end pe-4 border-0">High Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in leaderboard %}
+                    <tr class="align-middle {% if player.username == session['username'] %}row-active{% endif %}">
+                        <td class="ps-4 py-3 fw-bold">
+                            {% if loop.index == 1 %}<span class="medal gold">👑 1</span>
+                            {% elif loop.index == 2 %}<span class="medal silver">🥈 2</span>
+                            {% elif loop.index == 3 %}<span class="medal bronze">🥉 3</span>
+                            {% else %}{{ loop.index }}{% endif %}
+                        </td>
+                        <td class="fw-semibold">
+                            {{ player.username }}
+                            {% if player.username == session['username'] %} <span class="text-muted small fw-normal">(You)</span> {% endif %}
+                        </td>
+                        <td class="text-end pe-4 fw-bold text-dark">{{ player.high_score }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card border-0 shadow-sm mt-4 p-4 text-center custom-radius-lg">
+            <p class="text-muted fs-5">Play more games to improve your ranking!</p>
+            <a href="{{ url_for('launch_game') }}" class="btn btn-black mx-auto px-5 py-2 custom-radius">Play Now</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .leaderboard-bg { min-height: 100vh; background: linear-gradient(180deg, #f8faff 0%, #f0e7ff 100%); }
+    .custom-radius-lg { border-radius: 24px; }
+    .icon-square-purple { background: #a855f7; padding: 12px; border-radius: 12px; display: flex; align-items: center; }
+    
+    /* Style spécifique pour la ligne "You" */
+    .row-active { background-color: #f1f5f9 !important; }
+    
+    .btn-black { background: #020617; color: white; border-radius: 12px; font-weight: 600; }
+    .btn-black:hover { background: #1e293b; color: white; }
+
+    /* Médailles */
+    .medal { font-size: 1.1rem; }
+    .gold { color: #d97706; }
+    .silver { color: #64748b; }
+    .bronze { color: #b45309; }
+</style>
+{% endblock %}

@@ -1,4 +1,11 @@
-import pygame
+"""
+File : game/base_settings.py
+Description : Settings for PyPortal's game
+Autor : Alex Kamano
+Version : 1.0
+Project : PyPortal
+Date : 03 March 2026
+"""
 
 # Dimensions
 WIDTH, HEIGHT = 800, 600

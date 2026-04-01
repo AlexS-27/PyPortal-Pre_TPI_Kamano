@@ -1,3 +1,12 @@
+<!--
+File : templates/homePage.html
+Description : This file contains the view of the home page
+Autor : Alex Kamano with help of IA
+Version : 1.0
+Project : PyPortal
+Date : 3 March 2026
+-->
+
 {% extends "base.html" %}
 
 {% block content %}
@@ -47,7 +56,7 @@
                     <p class="text-muted fs-4">points</p>
                 </div>
 
-                <a href="#" class="btn btn-outline-dark px-4 py-2 custom-radius d-inline-flex align-items-center gap-2">
+                <a href=" {{ url_for('leaderboard') }} " class="btn btn-outline-dark px-4 py-2 custom-radius d-inline-flex align-items-center gap-2">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
                     View Leaderboard
                 </a>

@@ -1,3 +1,11 @@
+"""
+File : core/blacklist.txt
+Description : Blacklist of all the blocked pseudo
+Autor : Unknow (GitHub)
+Version : 1.0
+Project : PyPortal
+Date : 9 March 2026
+"""
 baiser
 bander
 bigornette
