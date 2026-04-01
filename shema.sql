@@ -1,3 +1,12 @@
+/*
+File : shema.sql
+Description : This file contains the code to the creation of the tables
+Autor : Alex Kamano
+Version : 1.0
+Project : PyPortal
+Date : 3 February 2026
+ */
+
 drop table if exists scores;
 drop table if exists users;
 

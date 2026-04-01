@@ -1,3 +1,12 @@
+"""
+File : game/effects.py
+Description : Particle Effects
+Autor : Alex Kamano
+Version : 1.0
+Project : PyPortal
+Date : 3 March 2026
+"""
+
 import pygame
 import random
 

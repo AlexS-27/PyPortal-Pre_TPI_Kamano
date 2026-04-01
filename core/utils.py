@@ -1,11 +1,11 @@
 """
 File : core/utils.py
 Description : Utility functions for validating user data
-                (password security, formatting, etc.).
+                (password security, formatting, pseudo security, etc.).
 Autor : Alex Kamano
 Version : 1.0
 Project : PyPortal
-Date : 10 février 2026
+Date : 9 March 2026
 """
 
 import re
@@ -30,6 +30,10 @@ def is_password_strong(password):
     return True, "Password is valid"
 
 def load_blacklist():
+    """
+            Function to get the list of blacklisted words
+            :return list of blacklisted words
+            """
     #Load the list of forbidden words
     file_path = os.path.join(os.path.dirname(__file__), 'blacklist.txt')
     if not os.path.isfile(file_path):
@@ -39,6 +43,11 @@ def load_blacklist():
         return [line.strip().lower() for line in f if line.strip()]
 
 def is_username_safe(username):
+    """
+            Function to check if username is safe
+            :param username:
+            :return a boolean value indicating if username is safe and a message:
+            """
     # Check if the pseudo is on the blacklist
     username = username.lower()
     blacklist = load_blacklist()
@@ -54,6 +63,11 @@ def is_username_safe(username):
     return True, "Username safe"
 
 def is_username_format_valid(username):
+    """
+            Function to check if username is valid
+            :param username:
+            :return a boolean value indicating if username is valid and a message:
+            """
     username = username.lower()
     blacklist = load_blacklist()
 
@@ -64,6 +78,11 @@ def is_username_format_valid(username):
     return True, "Username format is valid"
 
 def validate_username(username):
+    """
+            Function to validate username
+            :param username:
+            :return a boolean value indicating if username is valid and a message:
+            """
     is_valid, message = is_username_format_valid(username)
     if not is_valid:
         return False, message

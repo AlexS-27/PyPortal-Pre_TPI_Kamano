@@ -1,3 +1,11 @@
+"""
+File : game/targets.py
+Description : This file contains all the settings for the targets
+Autor : Alex Kamano
+Version : 1.0
+Project : PyPortal
+Date : 3 March 2026
+"""
 import pygame
 import random
 from .base_settings import *

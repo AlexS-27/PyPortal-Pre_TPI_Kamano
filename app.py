@@ -5,7 +5,7 @@ Description : Flask main controller handling routes, authentication
 Autor : Alex Kamano
 Version : 1.0
 Project : PyPortal
-Date : 10 Février 2026
+Date : 31 March 2026
 """
 
 import os
@@ -27,6 +27,13 @@ swagger = Swagger(app)
 # With the AI help
 # Manage the fact that the user need to be connect to access to the page
 def login_required(f):
+    """
+     Function to get user by username
+     :param f:
+     :return decorated function:
+     used for :
+     - the verification of the correctly login method
+     """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
@@ -35,10 +42,27 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# route to the main page
+# route default page
 @app.route('/')
+def default():
+    """
+     route to redirect to the login page
+     :return redirect to login page:
+     used for :
+     - the access to the login page
+     """
+    return redirect(url_for('login'))
+
+# route to the main page
+@app.route('/home')
 @login_required
 def home():
+    """
+      route to render template of the home page
+      :return render template of the home page:
+      used for :
+      - drawing the home page view
+      """
     # Récupérer le score via ton db_manager
     current_user_id = session.get('user_id')
     last_score = get_last_score(current_user_id)
@@ -103,40 +127,56 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """
-        Function to login user
-        :param username:
-        :param password:
-        :return:
         """
-    if request.method == 'POST':
-        username = request.form.get('username', '').strip()
-        password = request.form.get('password', '').strip()
-        user = get_user_by_username(username)
+    User Login
+    ---
+    tags:
+      - Authentication
+    parameters:
+      - name: username
+        in: formData
+        type: string
+        required: true
+      - name: password
+        in: formData
+        type: string
+        required: true
+    responses:
+      200:
+        description: Returns the login page or redirects to the home page
+      400:
+        description: Invalid input
+    """
+        if request.method == 'POST':
+            username = request.form.get('username', '').strip()
+            password = request.form.get('password', '').strip()
+            user = get_user_by_username(username)
 
-        if user and check_password_hash(user['password'], password):
-            session['user_id'] = user['id_user']
-            session['username'] = user['username']
-            return redirect(url_for('home'))
-        else:
-            flash('Invalid username or password', 'danger')
-            return render_template('login.html')
-    return render_template('login.html')
+            if user and check_password_hash(user['password'], password):
+                session['user_id'] = user['id_user']
+                session['username'] = user['username']
+                return redirect(url_for('home'))
+            else:
+                flash('Invalid username or password', 'danger')
+                return render_template('login.html')
+        return render_template('login.html')
 
 @app.route('/logout')
 def logout():
     """
-        Function to logout user
-    """
+      route to redirect to the login page
+      :return redirect to login page:
+      used for :
+      - the logout
+  """
     session.clear()
     flash('You have successfully logged out', 'info')
     return redirect(url_for('login'))
 
-# On définit une petite fonction wrapper
+# a wrapper function
 def game_wrapper(score_obj):
     score = run_game()
     score_obj.value = score
-
 
 @app.route('/launch_game')
 @login_required
@@ -170,6 +210,12 @@ def launch_game():
 @app.route('/leaderboard')
 @login_required
 def leaderboard():
+    """
+          route to render template of the leaderboard page
+          :return render template of the leaderboard page:
+          used for :
+          - get access to the leaderboard
+          """
     top_scores = get_leaderboard()
     return render_template("leaderboard.html", leaderboard=top_scores)
 

@@ -1,13 +1,12 @@
 """
 File : tests/test_utils.py
-Description : Test to check if the function for the verification of the password is working
+Description : Test to check if the function for the verification of
+                the password and usernames are working
 Autor : Alex Kamano
 Version : 1.0
 Project : PyPortal
 Date : 9 Mars 2026
 """
-from pyexpat.errors import messages
-
 from core.utils import is_password_strong, validate_username
 
 class TestIsPasswordStrong:
